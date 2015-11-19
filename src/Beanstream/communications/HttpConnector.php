@@ -54,7 +54,7 @@ class HttpConnector {
      * @throws ConnectorException
      */
     private function request($http_method = NULL, $url, $data = NULL)
-    {    	
+    {    
     	//check to see if we have curl installed on the server 
         if ( ! extension_loaded('curl')) {
         	//no curl
