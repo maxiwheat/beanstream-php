@@ -54,7 +54,7 @@ class HttpConnector {
      * @throws ConnectorException
      */
     private function request($http_method = NULL, $url, $data = NULL)
-    {
+    {    	
     	//check to see if we have curl installed on the server 
         if ( ! extension_loaded('curl')) {
         	//no curl
@@ -115,7 +115,15 @@ class HttpConnector {
         
 		//check for return errors from the API
         if (isset($res['code']) && 1 < $res['code'] && !($req['http_code'] >= 200 && $req['http_code'] < 300)) {
-            throw new ApiException($res['message'], $res['code']);
+            $message = $res['message'];
+            if ( ! empty($res['details'])) {
+                $details = array();
+                foreach ($res['details'] as $detail) {
+                    $details[] = $detail['message'];
+                }
+                $message .= ' ('.implode('; ', $details).'.)';
+            }
+            throw new ApiException($message, $res['code']);
         }
         
         return $res;
